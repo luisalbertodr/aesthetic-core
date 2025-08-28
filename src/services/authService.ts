@@ -1,5 +1,6 @@
+// authService.ts
 
-import { account, ID } from '@/lib/appwrite';
+import { account, ID, client } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -58,10 +59,14 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
+      // Usamos client.getURL().origin para obtener la URL de redirección correcta
+      const successUrl = client.getURL().origin + '/dashboard';
+      const failureUrl = client.getURL().origin + '/login';
+
       account.createOAuth2Session(
         OAuthProvider.Google,
-        `${window.location.origin}/dashboard`,
-        `${window.location.origin}/login`
+        successUrl,
+        failureUrl
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
