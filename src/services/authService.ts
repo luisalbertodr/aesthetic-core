@@ -1,5 +1,6 @@
 
 import { account, ID } from '@/lib/appwrite';
+import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
 export interface AuthUser extends Models.User<Models.Preferences> {}
@@ -58,7 +59,7 @@ class AuthService {
   async loginWithGoogle(): Promise<void> {
     try {
       account.createOAuth2Session(
-        'google',
+        OAuthProvider.Google,
         `${window.location.origin}/dashboard`,
         `${window.location.origin}/login`
       );
