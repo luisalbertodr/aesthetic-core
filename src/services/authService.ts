@@ -1,5 +1,5 @@
 
-import { account, ID, client, endpoint } from '@/lib/appwrite';
+import { account, ID, client, getClientEndpoint } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -58,7 +58,8 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar el endpoint importado para construir la URL de redirección
+      // Usar la función de ayuda para obtener el endpoint
+      const endpoint = getClientEndpoint();
       const origin = new URL(endpoint).origin;
 
       account.createOAuth2Session(
@@ -95,21 +96,18 @@ class AuthService {
       return false;
     }
   }
-  
+
   /**
    * Método de prueba para verificar la conexión con el servidor.
    */
-  async testConnection(): Promise<string> {
+  async testConnection(): Promise<boolean> {
     try {
+      const endpoint = getClientEndpoint();
       const response = await fetch(`${endpoint}/health`);
-      if (response.ok) {
-        return "Conexión exitosa";
-      } else {
-        return "Fallo en la conexión";
-      }
+      return response.ok;
     } catch (error) {
       console.error("Error al probar la conexión:", error);
-      return "Error de red";
+      return false;
     }
   }
 }
