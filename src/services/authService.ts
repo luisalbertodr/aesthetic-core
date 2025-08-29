@@ -74,8 +74,12 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      const successUrl = `${window.location.origin}/dashboard`;
-      const failureUrl = `${window.location.origin}/login`;
+      // Usar la URL actual del dominio permitido por Appwrite
+      const currentOrigin = window.location.origin;
+      const successUrl = `${currentOrigin}/dashboard`;
+      const failureUrl = `${currentOrigin}/login`;
+
+      console.log('OAuth URLs:', { successUrl, failureUrl, currentOrigin });
 
       account.createOAuth2Session(
         OAuthProvider.Google,
