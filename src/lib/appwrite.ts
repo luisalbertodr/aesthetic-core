@@ -5,8 +5,8 @@ import { Client, Account, Databases, Storage, ID } from 'appwrite';
 const client = new Client();
 
 client
-  .setEndpoint('https://appwrite.lipoout.com:4443/v1')
-  .setProject('68a3408b002f26b39ccd');
+  .setEndpoint('https://appwrite.lipoout.com/v1')
+  .setProject('68a8bb45000adadfb279');
 
 // Servicios de Appwrite
 export const account = new Account(client);
