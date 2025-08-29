@@ -57,7 +57,9 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      const origin = client.getURL().origin;
+      // Usar client.getEndpoint() para obtener la URL base correcta
+      const endpoint = client.getEndpoint();
+      const origin = new URL(endpoint).origin;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
