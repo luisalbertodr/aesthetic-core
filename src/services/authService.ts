@@ -1,5 +1,4 @@
-
-import { account, ID } from '@/lib/appwrite';
+import { account, ID, client } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -20,9 +19,7 @@ class AuthService {
    */
   async getCurrentUser(): Promise<AuthUser | null> {
     try {
-      const user = await account.get();
-      console.log('Usuario actual obtenido:', user.email);
-      return user;
+      return await account.get();
     } catch (error) {
       console.log('No hay usuario autenticado:', error);
       return null;
@@ -34,19 +31,11 @@ class AuthService {
    */
   async login({ email, password }: LoginCredentials): Promise<AuthUser> {
     try {
-      console.log('Intentando login con:', email);
       await account.createEmailPasswordSession(email, password);
-      const user = await account.get();
-      console.log('Login exitoso:', user.email);
-      return user;
-    } catch (error: any) {
+      return await account.get();
+    } catch (error) {
       console.error('Error en login:', error);
-      if (error.code === 401) {
-        throw new Error('Credenciales inválidas');
-      } else if (error.code === 500) {
-        throw new Error('Error de conexión con el servidor');
-      }
-      throw new Error('Error al iniciar sesión');
+      throw new Error('Credenciales inválidas');
     }
   }
 
@@ -55,16 +44,10 @@ class AuthService {
    */
   async register({ email, password, name }: RegisterCredentials): Promise<AuthUser> {
     try {
-      console.log('Intentando registro con:', email);
       await account.create(ID.unique(), email, password, name);
       return await this.login({ email, password });
-    } catch (error: any) {
+    } catch (error) {
       console.error('Error en registro:', error);
-      if (error.code === 409) {
-        throw new Error('El usuario ya existe');
-      } else if (error.code === 500) {
-        throw new Error('Error de conexión con el servidor');
-      }
       throw new Error('Error al crear la cuenta');
     }
   }
@@ -74,17 +57,12 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar la URL actual del dominio permitido por Appwrite
-      const currentOrigin = window.location.origin;
-      const successUrl = `${currentOrigin}/dashboard`;
-      const failureUrl = `${currentOrigin}/login`;
-
-      console.log('OAuth URLs:', { successUrl, failureUrl, currentOrigin });
+      const origin = client.getURL().origin;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
-        successUrl,
-        failureUrl
+        `${origin}/dashboard`,
+        `${origin}/login`
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
@@ -98,7 +76,6 @@ class AuthService {
   async logout(): Promise<void> {
     try {
       await account.deleteSession('current');
-      console.log('Logout exitoso');
     } catch (error) {
       console.error('Error en logout:', error);
       throw new Error('Error al cerrar sesión');
@@ -116,23 +93,8 @@ class AuthService {
       return false;
     }
   }
-
-  /**
-   * Prueba la conexión con Appwrite
-   */
-  async testConnection(): Promise<boolean> {
-    try {
-      await account.get();
-      console.log('Conexión con Appwrite: OK');
-      return true;
-    } catch (error: any) {
-      console.error('Error de conexión con Appwrite:', error);
-      if (error.message?.includes('NetworkError') || error.message?.includes('Failed to fetch')) {
-        console.error('Error de red - Verificar endpoint y conectividad');
-      }
-      return false;
-    }
-  }
 }
 
 export const authService = new AuthService();
+```
+```
