@@ -1,4 +1,3 @@
-
 import { databases, storage, DATABASE_ID, COLLECTIONS, BUCKETS, ID } from '@/lib/appwrite';
 import type { Models } from 'appwrite';
 
@@ -52,7 +51,7 @@ class DatabaseService {
    */
   async testConnection(): Promise<boolean> {
     try {
-      await databases.listDatabases();
+      await databases.listDocuments(DATABASE_ID, COLLECTIONS.CLIENTES, [], 1);
       console.log('Conexión con base de datos: OK');
       return true;
     } catch (error: any) {
@@ -69,21 +68,21 @@ class DatabaseService {
    */
   async checkCollections(): Promise<void> {
     try {
-      const collections = await databases.listCollections(DATABASE_ID);
-      const existingCollections = collections.collections.map(c => c.$id);
-      
-      console.log('Colecciones existentes:', existingCollections);
-      
-      Object.values(COLLECTIONS).forEach(collectionId => {
-        if (!existingCollections.includes(collectionId)) {
-          console.warn(`Colección '${collectionId}' no existe en la base de datos`);
+      // Try to access each collection to verify they exist
+      for (const [name, collectionId] of Object.entries(COLLECTIONS)) {
+        try {
+          await databases.listDocuments(DATABASE_ID, collectionId, [], 1);
+          console.log(`Colección '${name}' (${collectionId}): OK`);
+        } catch (error: any) {
+          if (error.code === 404) {
+            console.warn(`Colección '${name}' (${collectionId}) no existe en la base de datos`);
+          } else {
+            console.error(`Error verificando colección '${name}':`, error);
+          }
         }
-      });
+      }
     } catch (error: any) {
       console.error('Error verificando colecciones:', error);
-      if (error.code === 404) {
-        console.error('Base de datos no encontrada. Crear en Appwrite Console:', DATABASE_ID);
-      }
     }
   }
 
