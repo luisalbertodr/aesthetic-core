@@ -1,8 +1,9 @@
+
 import { Client, Account, Databases, Storage, ID } from 'appwrite';
 
 // Configuración de Appwrite
-const VITE_APPWRITE_PROJECT_ID = '68a8bb45000adadfb279';
-const VITE_APPWRITE_PUBLIC_ENDPOINT = 'https://appwrite.lipoout.com/v1';
+export const VITE_APPWRITE_PROJECT_ID = '68a8bb45000adadfb279';
+export const VITE_APPWRITE_PUBLIC_ENDPOINT = 'https://appwrite.lipoout.com/v1';
 
 const client = new Client();
 
@@ -32,8 +33,3 @@ export const BUCKETS = {
 } as const;
 
 export { ID, client };
-
-// Función de ayuda para obtener el endpoint
-export const getClientEndpoint = () => {
-    return client.getEndpoint();
-};
