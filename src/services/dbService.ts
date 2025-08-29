@@ -1,3 +1,4 @@
+
 import { databases, storage, DATABASE_ID, COLLECTIONS, BUCKETS, ID } from '@/lib/appwrite';
 import type { Models } from 'appwrite';
 
@@ -51,7 +52,7 @@ class DatabaseService {
    */
   async testConnection(): Promise<boolean> {
     try {
-      await databases.listDocuments(DATABASE_ID, COLLECTIONS.CLIENTES, [], 1);
+      await databases.listDocuments(DATABASE_ID, COLLECTIONS.CLIENTES);
       console.log('Conexión con base de datos: OK');
       return true;
     } catch (error: any) {
@@ -71,7 +72,7 @@ class DatabaseService {
       // Try to access each collection to verify they exist
       for (const [name, collectionId] of Object.entries(COLLECTIONS)) {
         try {
-          await databases.listDocuments(DATABASE_ID, collectionId, [], 1);
+          await databases.listDocuments(DATABASE_ID, collectionId);
           console.log(`Colección '${name}' (${collectionId}): OK`);
         } catch (error: any) {
           if (error.code === 404) {
