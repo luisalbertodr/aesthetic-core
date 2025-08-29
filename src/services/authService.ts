@@ -1,5 +1,5 @@
 
-import { account, ID, client, getClientEndpoint } from '@/lib/appwrite';
+import { account, ID, client, VITE_APPWRITE_PUBLIC_ENDPOINT } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -58,9 +58,8 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar la función de ayuda para obtener el endpoint
-      const endpoint = getClientEndpoint();
-      const origin = new URL(endpoint).origin;
+      // Usar la constante importada para construir la URL de redirección
+      const origin = new URL(VITE_APPWRITE_PUBLIC_ENDPOINT).origin;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
@@ -102,8 +101,7 @@ class AuthService {
    */
   async testConnection(): Promise<boolean> {
     try {
-      const endpoint = getClientEndpoint();
-      const response = await fetch(`${endpoint}/health`);
+      const response = await fetch(`${VITE_APPWRITE_PUBLIC_ENDPOINT}/health`);
       return response.ok;
     } catch (error) {
       console.error("Error al probar la conexión:", error);
