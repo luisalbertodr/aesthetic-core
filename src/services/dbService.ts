@@ -52,7 +52,7 @@ class DatabaseService {
    */
   async testConnection(): Promise<boolean> {
     try {
-      await databases.list();
+      await databases.listDatabases();
       console.log('Conexión con base de datos: OK');
       return true;
     } catch (error: any) {
