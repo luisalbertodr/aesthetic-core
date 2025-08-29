@@ -1,7 +1,7 @@
 
 // authService.ts
 
-import { account, ID, client } from '@/lib/appwrite';
+import { account, ID } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -60,8 +60,8 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      const successUrl = `${client.getURL().origin}/dashboard`;
-      const failureUrl = `${client.getURL().origin}/login`;
+      const successUrl = `${window.location.origin}/dashboard`;
+      const failureUrl = `${window.location.origin}/login`;
 
       account.createOAuth2Session(
         OAuthProvider.Google,

@@ -5,8 +5,8 @@ import { Client, Account, Databases, Storage, ID } from 'appwrite';
 const client = new Client();
 
 client
-  .setEndpoint(import.meta.env.VITE_APPWRITE_PUBLIC_ENDPOINT || 'https://cloud.appwrite.io/v1')
-  .setProject(import.meta.env.VITE_APPWRITE_PROJECT_ID || '');
+  .setEndpoint('https://212.230.23.11:4443/v1')
+  .setProject('68a3408b002f26b39ccd');
 
 // Servicios de Appwrite
 export const account = new Account(client);
