@@ -1,4 +1,3 @@
-
 import { Client, Account, Databases, Storage, ID } from 'appwrite';
 
 // Configuración de Appwrite
@@ -21,7 +20,7 @@ export const DATABASE_ID = 'clinic_database';
 
 export const COLLECTIONS = {
   CLIENTES: 'clientes',
-  EMPLEADOS: 'empleados',  
+  EMPLEADOS: 'empleados',
   CITAS: 'citas',
   ARTICULOS: 'articulos'
 } as const;
