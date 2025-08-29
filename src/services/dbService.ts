@@ -47,6 +47,46 @@ export interface Articulo {
 }
 
 class DatabaseService {
+  /**
+   * Prueba la conexión con la base de datos
+   */
+  async testConnection(): Promise<boolean> {
+    try {
+      await databases.list();
+      console.log('Conexión con base de datos: OK');
+      return true;
+    } catch (error: any) {
+      console.error('Error de conexión con base de datos:', error);
+      if (error.code === 404) {
+        console.error('Base de datos no encontrada. Verificar DATABASE_ID:', DATABASE_ID);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Verifica si las colecciones existen
+   */
+  async checkCollections(): Promise<void> {
+    try {
+      const collections = await databases.listCollections(DATABASE_ID);
+      const existingCollections = collections.collections.map(c => c.$id);
+      
+      console.log('Colecciones existentes:', existingCollections);
+      
+      Object.values(COLLECTIONS).forEach(collectionId => {
+        if (!existingCollections.includes(collectionId)) {
+          console.warn(`Colección '${collectionId}' no existe en la base de datos`);
+        }
+      });
+    } catch (error: any) {
+      console.error('Error verificando colecciones:', error);
+      if (error.code === 404) {
+        console.error('Base de datos no encontrada. Crear en Appwrite Console:', DATABASE_ID);
+      }
+    }
+  }
+
   // === CLIENTES ===
   
   /**
@@ -54,14 +94,18 @@ class DatabaseService {
    */
   async createCliente(cliente: Omit<Cliente, '$id' | '$createdAt' | '$updatedAt'>): Promise<Models.Document> {
     try {
+      console.log('Creando cliente:', cliente.email);
       return await databases.createDocument(
         DATABASE_ID,
         COLLECTIONS.CLIENTES,
         ID.unique(),
         cliente
       );
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creando cliente:', error);
+      if (error.code === 404) {
+        throw new Error('Colección de clientes no encontrada. Verificar configuración en Appwrite.');
+      }
       throw new Error('Error al crear cliente');
     }
   }

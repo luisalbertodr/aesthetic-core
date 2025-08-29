@@ -44,8 +44,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   useEffect(() => {
     const checkAuth = async () => {
       try {
+        console.log('Verificando autenticación...');
         const currentUser = await authService.getCurrentUser();
         setUser(currentUser);
+        if (currentUser) {
+          console.log('Usuario autenticado:', currentUser.email);
+        }
       } catch (error) {
         console.log('No hay usuario autenticado');
       } finally {
