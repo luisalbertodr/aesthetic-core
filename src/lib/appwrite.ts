@@ -1,14 +1,12 @@
+
 import { Client, Account, Databases, Storage, ID } from 'appwrite';
 
 // Configuración de Appwrite
-export const endpoint = 'https://appwrite.lipoout.com:4443/v1';
-export const projectID = '68a3408b002f26b39ccd';
-
 const client = new Client();
 
 client
-  .setEndpoint(endpoint)
-  .setProject(projectID);
+  .setEndpoint('https://appwrite.lipoout.com/v1')
+  .setProject('68a8bb45000adadfb279');
 
 // Servicios de Appwrite
 export const account = new Account(client);
@@ -20,7 +18,7 @@ export const DATABASE_ID = 'clinic_database';
 
 export const COLLECTIONS = {
   CLIENTES: 'clientes',
-  EMPLEADOS: 'empleados',  
+  EMPLEADOS: 'empleados', 
   CITAS: 'citas',
   ARTICULOS: 'articulos'
 } as const;
@@ -32,4 +30,3 @@ export const BUCKETS = {
 } as const;
 
 export { ID, client };
-
