@@ -1,5 +1,5 @@
 
-import { account, ID, client } from '@/lib/appwrite';
+import { account, ID, client, VITE_APPWRITE_PUBLIC_ENDPOINT } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -92,6 +92,19 @@ class AuthService {
       await account.get();
       return true;
     } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Método de prueba para verificar la conexión con el servidor.
+   */
+  async testConnection(): Promise<boolean> {
+    try {
+      const response = await fetch(`${VITE_APPWRITE_PUBLIC_ENDPOINT}/health`);
+      return response.ok;
+    } catch (error) {
+      console.error("Error al probar la conexión:", error);
       return false;
     }
   }
