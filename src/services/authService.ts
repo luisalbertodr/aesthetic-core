@@ -1,5 +1,5 @@
 
-import { account, ID, client, VITE_APPWRITE_PUBLIC_ENDPOINT } from '@/lib/appwrite';
+import { account, ID, client } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -58,13 +58,13 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar la constante importada para construir la URL de redirección
-      const origin = new URL(VITE_APPWRITE_PUBLIC_ENDPOINT).origin;
+      // Usar window.location.origin, que es la práctica estándar
+      const currentOrigin = window.location.origin;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
-        `${origin}/dashboard`,
-        `${origin}/login`
+        `${currentOrigin}/dashboard`,
+        `${currentOrigin}/login`
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
@@ -92,19 +92,6 @@ class AuthService {
       await account.get();
       return true;
     } catch {
-      return false;
-    }
-  }
-
-  /**
-   * Método de prueba para verificar la conexión con el servidor.
-   */
-  async testConnection(): Promise<boolean> {
-    try {
-      const response = await fetch(`${VITE_APPWRITE_PUBLIC_ENDPOINT}/health`);
-      return response.ok;
-    } catch (error) {
-      console.error("Error al probar la conexión:", error);
       return false;
     }
   }
