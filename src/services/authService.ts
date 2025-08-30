@@ -60,11 +60,15 @@ class AuthService {
     try {
       // Usar window.location.origin, que es la práctica estándar
       const currentOrigin = window.location.origin;
+      const successUrl = `${currentOrigin}/dashboard`;
+      const failureUrl = `${currentOrigin}/login`;
+
+      console.log('URLs de redirección generadas:', { successUrl, failureUrl });
 
       account.createOAuth2Session(
         OAuthProvider.Google,
-        `${currentOrigin}/dashboard`,
-        `${currentOrigin}/login`
+        successUrl,
+        failureUrl
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
