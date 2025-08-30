@@ -58,17 +58,14 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar window.location.origin, que es la práctica estándar
-      const currentOrigin = window.location.origin;
-      const successUrl = `${currentOrigin}/dashboard`;
-      const failureUrl = `${currentOrigin}/login`;
-
-      console.log('URLs de redirección generadas:', { successUrl, failureUrl });
+      // Usar window.location.origin para la URL de redirección
+      // para que coincida con el host de la aplicación.
+      const origin = window.location.origin;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
-        successUrl,
-        failureUrl
+        origin, // URL de éxito
+        `${origin}/login` // URL de fracaso
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
