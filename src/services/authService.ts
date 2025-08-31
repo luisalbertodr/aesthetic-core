@@ -1,5 +1,5 @@
 
-import { account, ID, client, VITE_APPWRITE_PUBLIC_ENDPOINT } from '@/lib/appwrite';
+import { account, ID, VITE_APPWRITE_PUBLIC_ENDPOINT } from '@/lib/appwrite';
 import { OAuthProvider } from 'appwrite';
 import type { Models } from 'appwrite';
 
@@ -58,14 +58,14 @@ class AuthService {
    */
   async loginWithGoogle(): Promise<void> {
     try {
-      // Usar window.location.origin para la URL de redirección
-      // para que coincida con el host de la aplicación.
-      const origin = window.location.origin;
+      const currentOrigin = "https://preview--aesthetic-core.lovable.app";
+      const successUrl = `${currentOrigin}/dashboard`;
+      const failureUrl = `${currentOrigin}/login`;
 
       account.createOAuth2Session(
         OAuthProvider.Google,
-        origin, // URL de éxito
-        `${origin}/login` // URL de fracaso
+        successUrl,
+        failureUrl
       );
     } catch (error) {
       console.error('Error en login con Google:', error);
